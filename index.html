@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Anshrah ✦</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --lilac:#c9b8f0;--lilac-deep:#7c5cbf;
+  --rose:#f4a7c0;--rose-deep:#e0607e;
+  --peach:#f9d4b6;--gold:#f5d376;
+  --sky:#a8d8f0;--dark:#0d0818;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--dark);color:#fff;font-family:'Lato',sans-serif;overflow-x:hidden;cursor:none;}
+
+/* CURSOR */
+#cursor{
+  position:fixed;width:10px;height:10px;border-radius:50%;
+  background:radial-gradient(circle,#fff 20%,var(--rose) 80%);
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 8px var(--rose),0 0 16px rgba(244,167,192,0.35);
+  mix-blend-mode:screen;will-change:transform;
+}
+
+/* SINGLE CANVAS for everything */
+#cosmos{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+/* SPARKLE OVERLAY */
+#sparkle-layer{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;overflow:hidden;}
+
+main{position:relative;z-index:2;}
+
+/* ─── SECTIONS ─── */
+section{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5rem 2rem;}
+
+/* HERO */
+.hero-whisper{font-family:'Dancing Script',cursive;font-size:clamp(1rem,2.5vw,1.4rem);color:rgba(201,184,240,0.75);margin-bottom:1.5rem;opacity:0;animation:fadeUp 1.2s 0.5s forwards;}
+.hero-name{font-family:'Playfair Display',serif;font-size:clamp(4.5rem,15vw,10rem);font-weight:700;line-height:1;letter-spacing:-0.02em;background:linear-gradient(135deg,#fff 0%,var(--rose) 35%,var(--lilac) 60%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:0;animation:bloomIn 1.6s 0.9s cubic-bezier(0.16,1,0.3,1) forwards;filter:drop-shadow(0 0 30px rgba(244,167,192,0.25));}
+.hero-tagline{font-family:'Playfair Display',serif;font-size:clamp(1rem,2.5vw,1.5rem);font-style:italic;color:rgba(255,255,255,0.55);margin-top:1.5rem;opacity:0;animation:fadeUp 1s 1.8s forwards;max-width:480px;text-align:center;}
+.scroll-hint{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeUp 1s 2.5s forwards;}
+.scroll-hint span{font-size:0.6rem;letter-spacing:0.35em;text-transform:uppercase;color:rgba(255,255,255,0.2);}
+.scroll-dots{display:flex;flex-direction:column;gap:3px;align-items:center;}
+.scroll-dots i{width:3px;height:3px;background:var(--rose);border-radius:50%;animation:dotfall 1.8s ease-in-out infinite;}
+.scroll-dots i:nth-child(2){animation-delay:0.3s;opacity:0.6;}
+.scroll-dots i:nth-child(3){animation-delay:0.6s;opacity:0.3;}
+
+/* UNIVERSE */
+#universe{gap:3.5rem;}
+.orbit-wrap{position:relative;width:min(460px,84vw);height:min(460px,84vw);}
+#orbit-canvas{width:100%;height:100%;}
+.universe-quote{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,3.2vw,1.9rem);font-style:italic;color:rgba(255,255,255,0.8);text-align:center;max-width:520px;line-height:1.65;}
+.universe-quote span{color:var(--rose);font-style:normal;}
+
+/* PETALS — liquid glass */
+#petals-section{gap:3rem;}
+.petal-label{font-family:'Dancing Script',cursive;font-size:0.85rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--lilac);}
+.reasons-wrap{display:flex;flex-wrap:wrap;gap:1.4rem;justify-content:center;max-width:760px;}
+
+.reason-petal{
+  position:relative;overflow:hidden;
+  padding:1.8rem 2rem;
+  border-radius:60% 40% 55% 45% / 50% 60% 40% 50%;
+  /* liquid glass */
+  background:rgba(255,255,255,0.06);
+  backdrop-filter:blur(18px) saturate(1.4);
+  -webkit-backdrop-filter:blur(18px) saturate(1.4);
+  border:1px solid rgba(255,255,255,0.14);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.18),0 8px 32px rgba(0,0,0,0.25);
+  text-align:center;cursor:default;
+  transition:transform 0.45s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.4s ease,background 0.4s ease;
+  will-change:transform;
+}
+.reason-petal::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 20%,rgba(255,255,255,0.12),transparent 60%);
+  pointer-events:none;border-radius:inherit;
+}
+.reason-petal:hover{
+  transform:scale(1.07) rotate(-1.5deg);
+  background:rgba(255,255,255,0.10);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.22),0 16px 40px rgba(0,0,0,0.3),0 0 40px rgba(244,167,192,0.12);
+}
+.reason-petal:nth-child(1){border-color:rgba(244,167,192,0.25);}
+.reason-petal:nth-child(2){border-color:rgba(201,184,240,0.25);}
+.reason-petal:nth-child(3){border-color:rgba(245,211,118,0.25);}
+.reason-petal:nth-child(4){border-color:rgba(168,216,240,0.25);}
+.reason-num{font-family:'Dancing Script',cursive;font-size:2rem;color:rgba(255,255,255,0.15);line-height:1;margin-bottom:0.3rem;}
+.reason-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:0.35rem;}
+.reason-desc{font-size:0.8rem;font-weight:300;line-height:1.7;color:rgba(255,255,255,0.45);max-width:155px;}
+
+/* LETTER SECTION */
+#letter-section{gap:2rem;}
+.letter-hint{font-family:'Dancing Script',cursive;font-size:1.15rem;color:rgba(255,255,255,0.38);text-align:center;}
+.envelope-wrap{position:relative;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:0.8rem;transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);will-change:transform;}
+.envelope-wrap:hover{transform:scale(1.05) translateY(-5px);}
+.env-glow{position:absolute;inset:-28px;border-radius:50%;background:radial-gradient(circle,rgba(244,167,192,0.18),transparent 70%);opacity:0;transition:opacity 0.4s ease;pointer-events:none;}
+.envelope-wrap:hover .env-glow{opacity:1;}
+.env-svg{width:138px;filter:drop-shadow(0 4px 18px rgba(244,167,192,0.22));transition:filter 0.3s ease;}
+.envelope-wrap:hover .env-svg{filter:drop-shadow(0 4px 28px rgba(244,167,192,0.48));}
+.env-label{font-family:'Dancing Script',cursive;font-size:1rem;color:rgba(244,167,192,0.65);letter-spacing:0.1em;transition:color 0.3s ease;}
+.envelope-wrap:hover .env-label{color:var(--rose);}
+
+/* LETTER MODAL */
+.letter-bg{
+  position:fixed;inset:0;
+  background:rgba(8,4,18,0.75);
+  backdrop-filter:blur(20px) saturate(1.2);
+  -webkit-backdrop-filter:blur(20px) saturate(1.2);
+  z-index:200;
+  display:flex;align-items:center;justify-content:center;padding:2rem;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.45s ease;
+}
+.letter-bg.open{opacity:1;pointer-events:all;}
+
+/* Liquid glass paper */
+.letter-paper{
+  position:relative;overflow:hidden;
+  background:rgba(255,250,245,0.88);
+  backdrop-filter:blur(24px) saturate(1.6);
+  -webkit-backdrop-filter:blur(24px) saturate(1.6);
+  border:1px solid rgba(255,255,255,0.6);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.9),
+    inset 0 -1px 0 rgba(0,0,0,0.04),
+    0 40px 80px rgba(0,0,0,0.45),
+    0 0 0 0.5px rgba(245,211,118,0.25);
+  border-radius:8px;
+  color:#2a1525;
+  max-width:560px;width:100%;
+  padding:clamp(2rem,6vw,3.8rem) clamp(2rem,6vw,3.5rem);
+  transform:translateY(28px) scale(0.96) rotate(-0.4deg);
+  transition:transform 0.55s cubic-bezier(0.16,1,0.3,1);
+  max-height:90vh;overflow-y:auto;
+}
+/* glass highlight */
+.letter-paper::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:50%;
+  background:linear-gradient(to bottom,rgba(255,255,255,0.35),transparent);
+  border-radius:inherit;pointer-events:none;
+}
+/* paper lines */
+.letter-paper::after{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(to bottom,transparent,transparent 27px,rgba(42,21,37,0.04) 27px,rgba(42,21,37,0.04) 28px);
+  border-radius:inherit;pointer-events:none;
+}
+.letter-bg.open .letter-paper{transform:translateY(0) scale(1) rotate(0deg);}
+
+.letter-x{position:absolute;top:1rem;right:1rem;background:none;border:none;cursor:pointer;font-size:1.1rem;color:rgba(42,21,37,0.3);transition:color 0.2s,transform 0.3s;z-index:2;padding:6px;}
+.letter-x:hover{color:var(--rose-deep);transform:rotate(90deg);}
+.letter-flower{text-align:center;font-size:1.8rem;margin-bottom:1.8rem;}
+.letter-dear{font-family:'Playfair Display',serif;font-size:1.5rem;color:#2a1525;margin-bottom:1.2rem;}
+.letter-text{font-family:'Playfair Display',serif;font-size:1.05rem;line-height:2;color:#3a2535;}
+.letter-text p{margin-bottom:1.15rem;}
+.letter-ps{margin-top:1.4rem;font-family:'Lato',sans-serif;font-size:0.88rem;font-style:italic;color:rgba(42,21,37,0.42);border-top:1px dashed rgba(42,21,37,0.1);padding-top:1rem;}
+.letter-sign{margin-top:1.8rem;font-family:'Dancing Script',cursive;font-size:1.45rem;color:rgba(42,21,37,0.52);}
+
+/* CLOSING */
+#closing{gap:1.5rem;text-align:center;}
+.closing-flowers{font-size:2rem;letter-spacing:0.5rem;opacity:0.65;animation:floatSlow 5s ease-in-out infinite;}
+.closing-promise{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,3.2vw,2rem);font-weight:400;font-style:italic;color:rgba(255,255,255,0.78);max-width:560px;line-height:1.5;}
+.closing-sub{font-size:0.7rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(255,255,255,0.18);}
+.heartbeat{font-size:2.5rem;animation:heartpulse 1.4s ease-in-out infinite;display:inline-block;color:var(--rose);filter:drop-shadow(0 0 10px rgba(244,167,192,0.55));}
+
+/* MUSIC */
+#music-btn{
+  position:fixed;bottom:1.8rem;right:1.8rem;z-index:50;
+  width:46px;height:46px;border-radius:50%;
+  /* liquid glass */
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,0.18);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.2),0 4px 16px rgba(0,0,0,0.3);
+  color:rgba(255,255,255,0.65);font-size:1.15rem;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background 0.3s,box-shadow 0.3s,color 0.3s;
+}
+#music-btn.playing{
+  background:rgba(244,167,192,0.15);
+  border-color:rgba(244,167,192,0.4);color:var(--rose);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.25),0 0 20px rgba(244,167,192,0.2);
+  animation:musicglow 2.5s ease-in-out infinite;
+}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.9s ease,transform 0.9s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+@keyframes bloomIn{from{opacity:0;transform:scale(0.93) translateY(18px);}to{opacity:1;transform:scale(1) translateY(0);}}
+@keyframes dotfall{0%,100%{transform:translateY(0);opacity:1;}50%{transform:translateY(5px);opacity:0.25;}}
+@keyframes floatSlow{0%,100%{transform:translateY(0);}50%{transform:translateY(-9px);}}
+@keyframes heartpulse{0%,100%{transform:scale(1);}14%{transform:scale(1.25);}28%{transform:scale(1);}42%{transform:scale(1.18);}56%{transform:scale(1);}}
+@keyframes musicglow{0%,100%{box-shadow:inset 0 1px 0 rgba(255,255,255,0.25),0 0 16px rgba(244,167,192,0.18);}50%{box-shadow:inset 0 1px 0 rgba(255,255,255,0.25),0 0 28px rgba(244,167,192,0.36);}}
+@keyframes sparkle{0%{transform:translate(0,0) scale(1);opacity:1;}100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0;}}
+@keyframes petalFloat{0%,100%{transform:rotate(var(--r0));}50%{transform:rotate(var(--r1));}}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+
+<!-- Single unified canvas -->
+<canvas id="cosmos"></canvas>
+<div id="sparkle-layer"></div>
+<div id="cursor"></div>
+
+<audio id="bg-music" loop><source src="fairytale.mp3" type="audio/mpeg"></audio>
+<button id="music-btn" aria-label="Toggle music">♪</button>
+
+<main>
+
+<section id="hero">
+  <p class="hero-whisper">for the one who changed everything</p>
+  <h1 class="hero-name">Anshrah</h1>
+  <p class="hero-tagline">the morning sunshine that makes the whole day better</p>
+  <div class="scroll-hint">
+    <div class="scroll-dots"><i></i><i></i><i></i></div>
+    <span>scroll</span>
+  </div>
+</section>
+
+<section id="universe">
+  <div class="orbit-wrap reveal"><canvas id="orbit-canvas"></canvas></div>
+  <p class="universe-quote reveal">
+    You are not just someone I met.<br>
+    You are <span>the center of my universe</span>,<br>
+    and everything else just orbits you.
+  </p>
+</section>
+
+<section id="petals-section">
+  <p class="petal-label reveal">things I love about you</p>
+  <div class="reasons-wrap reveal">
+    <div class="reason-petal">
+      <div class="reason-num">✦</div>
+      <div class="reason-title">Your presence</div>
+      <p class="reason-desc">Every message from you makes the whole world feel a little brighter.</p>
+    </div>
+    <div class="reason-petal">
+      <div class="reason-num">✿</div>
+      <div class="reason-title">Your warmth</div>
+      <p class="reason-desc">There is a kind of sunshine only you carry. The kind that stays long after you are gone.</p>
+    </div>
+    <div class="reason-petal">
+      <div class="reason-num">❋</div>
+      <div class="reason-title">Your way</div>
+      <p class="reason-desc">I never planned to fall. But you have this way of making it completely inevitable.</p>
+    </div>
+    <div class="reason-petal">
+      <div class="reason-num">✾</div>
+      <div class="reason-title">Your luck</div>
+      <p class="reason-desc">The luck that brought you to me, I will spend the rest of my life being grateful for it.</p>
+    </div>
+  </div>
+</section>
+
+<section id="letter-section">
+  <p class="letter-hint reveal">I left something here for you to find ✦</p>
+  <div class="envelope-wrap reveal" id="env-btn" tabindex="0" role="button" aria-label="Open letter">
+    <div class="env-glow"></div>
+    <svg class="env-svg" viewBox="0 0 140 92" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="1" y="1" width="138" height="90" rx="6" fill="rgba(244,167,192,0.05)" stroke="rgba(244,167,192,0.35)" stroke-width="1"/>
+      <path d="M1 7 L70 52 L139 7" stroke="rgba(244,167,192,0.45)" stroke-width="1" fill="none"/>
+      <path d="M1 91 L50 50" stroke="rgba(244,167,192,0.22)" stroke-width="1"/>
+      <path d="M139 91 L90 50" stroke="rgba(244,167,192,0.22)" stroke-width="1"/>
+      <circle cx="70" cy="46" r="11" fill="rgba(245,211,118,0.16)" stroke="rgba(245,211,118,0.52)" stroke-width="1"/>
+      <text x="70" y="50.5" text-anchor="middle" font-family="Playfair Display,serif" font-size="10" fill="rgba(245,211,118,0.9)">A</text>
+      <text x="20" y="30" font-size="8" fill="rgba(201,184,240,0.45)">✦</text>
+      <text x="112" y="28" font-size="7" fill="rgba(244,167,192,0.45)">✿</text>
+    </svg>
+    <span class="env-label">open the letter ✦</span>
+  </div>
+</section>
+
+<section id="closing">
+  <div class="closing-flowers reveal">✿ ✦ ✿</div>
+  <p class="closing-promise reveal">"I promise to always be there, whenever you need me, for as long as we grow old."</p>
+  <p class="closing-sub reveal">written with everything I have</p>
+  <span class="heartbeat reveal">♥</span>
+</section>
+
+</main>
+
+<!-- LETTER -->
+<div class="letter-bg" id="letter-bg" role="dialog" aria-modal="true">
+  <div class="letter-paper">
+    <button class="letter-x" id="letter-x" aria-label="Close">✕</button>
+    <div class="letter-flower">✿</div>
+    <p class="letter-dear">Hey Anshrah,</p>
+    <div class="letter-text">
+      <p>You are literally my dream girl. I still do not know how powerful my luck was to get to be with you. You are the morning sunshine that makes the whole day better, and the warmth I did not know I was even looking for.</p>
+      <p>I do not know when I fell for you, but it is clear that I did fall, and I fell hard. So hard that I always looked for your message. I wanted to talk to you, wanted to be in your world, in your attention, in your day.</p>
+      <p>Please be an extension of me, and I promise I will always be there for you whenever you need me. I cannot tell you enough how much I love you, but the thing I always hope for is to be together and to love you till we grow old.</p>
+    </div>
+    <p class="letter-ps">P.S. I was wrong before, but you showed me what was right. Thank you for that.</p>
+    <p class="letter-sign">With everything, always ♥</p>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// CURSOR (rAF-driven, no layout thrash)
+// ══════════════════════════════════════════════
+const cur = document.getElementById('cursor');
+let mx = window.innerWidth/2, my = window.innerHeight/2;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; }, {passive:true});
+(function moveCursor(){
+  cur.style.left = mx + 'px';
+  cur.style.top  = my + 'px';
+  requestAnimationFrame(moveCursor);
+})();
+
+// ══════════════════════════════════════════════
+// UNIFIED CANVAS — cosmos + floating petals
+// ══════════════════════════════════════════════
+const C = document.getElementById('cosmos');
+const ctx = C.getContext('2d');
+let W, H;
+function resize(){ W = C.width = window.innerWidth; H = C.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize, {passive:true});
+
+// Stars
+const STAR_COUNT = 280;
+const stars = [];
+for(let i = 0; i < STAR_COUNT; i++){
+  const z = Math.random();
+  stars.push({
+    x: Math.random(), y: Math.random(), z,
+    size: 0.4 + (1 - z) * 1.6,
+    baseAlpha: 0.15 + (1-z) * 0.7,
+    phase: Math.random() * Math.PI * 2,
+    speed: 0.006 + Math.random() * 0.018,
+    color: Math.random() < 0.11 ? '#c9b8f0' : Math.random() < 0.07 ? '#f5d376' : Math.random() < 0.05 ? '#f4a7c0' : '#ffffff'
+  });
+}
+
+// Floating symbols
+const SYMS = ['✿','✾','❋','✦','❀','⋆'];
+const floats = [];
+for(let i = 0; i < 18; i++){
+  floats.push({
+    x: Math.random() * 1, y: Math.random() * 1,
+    sym: SYMS[i % SYMS.length],
+    sz: 10 + Math.random() * 14,
+    vx: (Math.random() - 0.5) * 0.00015,
+    vy: -(0.00008 + Math.random() * 0.00014),
+    alpha: 0.04 + Math.random() * 0.12,
+    rot: Math.random() * Math.PI * 2,
+    rotV: (Math.random() - 0.5) * 0.004,
+    color: ['#f4a7c0','#c9b8f0','#f5d376','#b8eada'][i % 4]
+  });
+}
+
+// Mouse parallax (smoothed)
+let pmx = 0, pmy = 0, tmx = 0, tmy = 0;
+document.addEventListener('mousemove', e => {
+  tmx = (e.clientX / window.innerWidth  - 0.5) * 0.0025;
+  tmy = (e.clientY / window.innerHeight - 0.5) * 0.0025;
+}, {passive:true});
+
+let t = 0;
+function drawCosmos(){
+  t += 0.01;
+  pmx += (tmx - pmx) * 0.05;
+  pmy += (tmy - pmy) * 0.05;
+
+  // Background gradient
+  const bg = ctx.createRadialGradient(W*.5, H*.45, 0, W*.5, H*.5, H*.85);
+  bg.addColorStop(0, '#120a22');
+  bg.addColorStop(0.55, '#0d0818');
+  bg.addColorStop(1, '#07040e');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+
+  // Nebula blobs (cheap, no extra canvas)
+  ctx.save(); ctx.globalCompositeOperation = 'screen';
+  [[0.22,0.3,260,'rgba(201,184,240,0.022)'],[0.74,0.62,300,'rgba(244,167,192,0.018)'],[0.5,0.82,190,'rgba(168,216,240,0.014)']].forEach(([nx,ny,nr,nc])=>{
+    const grd = ctx.createRadialGradient(nx*W, ny*H, 0, nx*W, ny*H, nr);
+    grd.addColorStop(0, nc); grd.addColorStop(1, 'transparent');
+    ctx.fillStyle = grd; ctx.fillRect(0,0,W,H);
+  });
+  ctx.restore();
+
+  // Stars with parallax
+  for(let i = 0; i < STAR_COUNT; i++){
+    const s = stars[i];
+    const a = s.baseAlpha * (0.6 + 0.4 * Math.sin(t * s.speed * 6 + s.phase));
+    const px = (s.x + pmx * (1 - s.z) * 9) * W;
+    const py = (s.y + pmy * (1 - s.z) * 9) * H;
+    const sz = s.size;
+
+    ctx.globalAlpha = a;
+    // bright stars get a soft cross spike
+    if(a > 0.55 && sz > 1.1){
+      ctx.strokeStyle = s.color; ctx.lineWidth = 0.4; ctx.globalAlpha = a * 0.45;
+      ctx.beginPath();
+      ctx.moveTo(px - sz*2.5, py); ctx.lineTo(px + sz*2.5, py);
+      ctx.moveTo(px, py - sz*2.5); ctx.lineTo(px, py + sz*2.5);
+      ctx.stroke();
+      ctx.globalAlpha = a;
+    }
+    ctx.fillStyle = s.color;
+    ctx.beginPath(); ctx.arc(px, py, sz, 0, 6.283); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  // Floating symbols
+  for(let i = 0; i < floats.length; i++){
+    const f = floats[i];
+    f.x += f.vx; f.y += f.vy; f.rot += f.rotV;
+    if(f.y < -0.04) f.y = 1.04;
+    if(f.x < -0.04) f.x = 1.04;
+    if(f.x >  1.04) f.x = -0.02;
+    ctx.save();
+    ctx.globalAlpha = f.alpha;
+    ctx.fillStyle = f.color;
+    ctx.font = f.sz + 'px serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.translate(f.x * W, f.y * H);
+    ctx.rotate(f.rot);
+    ctx.fillText(f.sym, 0, 0);
+    ctx.restore();
+  }
+
+  requestAnimationFrame(drawCosmos);
+}
+drawCosmos();
+
+// ══════════════════════════════════════════════
+// ORBIT CANVAS (dedicated but lightweight)
+// ══════════════════════════════════════════════
+const OC = document.getElementById('orbit-canvas');
+const oc = OC.getContext('2d');
+const OS = Math.min(460, window.innerWidth * 0.84);
+OC.width = OS; OC.height = OS;
+const CX = OS/2, CY = OS/2;
+
+const RINGS = [
+  {r:78,  words:['radiant','kind'],          spd:0.009,  col:'rgba(244,167,192,'},
+  {r:128, words:['graceful','brave','warm'],  spd:-0.006, col:'rgba(201,184,240,'},
+  {r:185, words:['my sunshine','rare','dream','beautiful'], spd:0.004, col:'rgba(245,211,118,'},
+];
+
+let ot = 0;
+function drawOrbit(){
+  ot++;
+  oc.clearRect(0, 0, OS, OS);
+
+  // soft center bloom
+  const bg = oc.createRadialGradient(CX,CY,0,CX,CY,OS/2);
+  bg.addColorStop(0,'rgba(201,184,240,0.07)'); bg.addColorStop(0.45,'rgba(244,167,192,0.03)'); bg.addColorStop(1,'transparent');
+  oc.fillStyle=bg; oc.beginPath(); oc.arc(CX,CY,OS/2,0,6.283); oc.fill();
+
+  RINGS.forEach(ring => {
+    // dashed ring
+    oc.beginPath(); oc.arc(CX,CY,ring.r,0,6.283);
+    oc.strokeStyle=ring.col+'0.12)'; oc.lineWidth=1;
+    oc.setLineDash([3,8]); oc.stroke(); oc.setLineDash([]);
+
+    const step = (Math.PI*2) / ring.words.length;
+    ring.words.forEach((word, i) => {
+      const angle = ot * ring.spd * 0.6 + step * i;
+      const wx = CX + ring.r * Math.cos(angle);
+      const wy = CY + ring.r * Math.sin(angle);
+
+      // glow dot
+      const dg = oc.createRadialGradient(wx,wy,0,wx,wy,5);
+      dg.addColorStop(0,ring.col+'0.9)'); dg.addColorStop(1,'transparent');
+      oc.fillStyle=dg; oc.beginPath(); oc.arc(wx,wy,5,0,6.283); oc.fill();
+
+      // word
+      oc.fillStyle=ring.col+'0.72)';
+      oc.font='300 11px Lato,sans-serif';
+      oc.textAlign='center'; oc.textBaseline='middle';
+      oc.fillText(word, wx, wy + 15);
+    });
+  });
+
+  // center glow
+  const cg = oc.createRadialGradient(CX,CY,0,CX,CY,42);
+  cg.addColorStop(0,'rgba(255,255,255,0.95)'); cg.addColorStop(0.28,'rgba(244,167,192,0.8)'); cg.addColorStop(0.6,'rgba(201,184,240,0.5)'); cg.addColorStop(1,'transparent');
+  oc.fillStyle=cg; oc.beginPath(); oc.arc(CX,CY,42,0,6.283); oc.fill();
+
+  // center letter
+  oc.fillStyle='rgba(255,255,255,0.94)';
+  oc.font='300 26px Playfair Display,serif';
+  oc.textAlign='center'; oc.textBaseline='middle';
+  oc.fillText('A', CX, CY);
+
+  // outer sparkle dots
+  const now = ot * 0.012;
+  for(let s=0; s<8; s++){
+    const a = s * Math.PI/4 + now * 0.28;
+    const rd = 202 + Math.sin(now + s) * 14;
+    const sx = CX + rd * Math.cos(a), sy = CY + rd * Math.sin(a);
+    const sa = 0.25 + 0.28 * Math.sin(now * 2.1 + s);
+    oc.fillStyle=`rgba(245,211,118,${sa})`;
+    oc.font='9px serif'; oc.textAlign='center'; oc.textBaseline='middle';
+    oc.fillText('✦', sx, sy);
+  }
+
+  requestAnimationFrame(drawOrbit);
+}
+drawOrbit();
+
+// ══════════════════════════════════════════════
+// SCROLL REVEAL
+// ══════════════════════════════════════════════
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); revObs.unobserve(e.target); }});
+}, {threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+// ══════════════════════════════════════════════
+// LETTER
+// ══════════════════════════════════════════════
+const lbg = document.getElementById('letter-bg');
+const envBtn = document.getElementById('env-btn');
+const lx = document.getElementById('letter-x');
+const openL  = () => { lbg.classList.add('open');  document.body.style.overflow='hidden'; };
+const closeL = () => { lbg.classList.remove('open'); document.body.style.overflow=''; };
+envBtn.addEventListener('click', openL);
+envBtn.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' ') openL(); });
+lx.addEventListener('click', closeL);
+lbg.addEventListener('click', e => { if(e.target===lbg) closeL(); });
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeL(); });
+
+// ══════════════════════════════════════════════
+// SPARKLE ON CLICK (pooled DOM nodes, throttled)
+// ══════════════════════════════════════════════
+const sparkLayer = document.getElementById('sparkle-layer');
+const POOL_SIZE = 40;
+const pool = [];
+for(let i=0; i<POOL_SIZE; i++){
+  const el = document.createElement('span');
+  el.style.cssText='position:absolute;pointer-events:none;font-size:12px;will-change:transform,opacity;display:none;';
+  sparkLayer.appendChild(el);
+  pool.push({el, free:true});
+}
+const sparkChars = ['✦','✿','❋','✾','*'];
+const sparkColors = ['#f4a7c0','#c9b8f0','#f5d376','#b8eada','#fff'];
+function burst(x, y, n){
+  let spawned = 0;
+  for(let i=0; i<pool.length && spawned<n; i++){
+    const p = pool[i];
+    if(!p.free) continue;
+    p.free = false;
+    const tx = (Math.random()-0.5)*80, ty = -35-Math.random()*70;
+    p.el.textContent = sparkChars[Math.floor(Math.random()*sparkChars.length)];
+    p.el.style.cssText=`
+      position:absolute;pointer-events:none;font-size:${10+Math.random()*9}px;
+      color:${sparkColors[Math.floor(Math.random()*sparkColors.length)]};
+      left:${x}px;top:${y}px;display:block;
+      --tx:${tx}px;--ty:${ty}px;
+      animation:sparkle ${0.55+Math.random()*0.6}s ease-out forwards;
+    `;
+    spawned++;
+    setTimeout(() => { p.el.style.display='none'; p.free=true; }, 1200);
+  }
+}
+
+let lastBurst = 0;
+document.addEventListener('click', e => {
+  if(Date.now() - lastBurst < 80) return;
+  lastBurst = Date.now();
+  if(e.target.closest('#letter-bg') || e.target.closest('#music-btn')) return;
+  burst(e.clientX, e.clientY, 7);
+}, {passive:true});
+
+// Throttled trail on mouse move
+let lastTrail = 0;
+document.addEventListener('mousemove', e => {
+  if(Date.now() - lastTrail < 55) return;
+  lastTrail = Date.now();
+  if(Math.random() > 0.45) return;
+  burst(e.clientX, e.clientY, 1);
+}, {passive:true});
+
+// ══════════════════════════════════════════════
+// MUSIC
+// ══════════════════════════════════════════════
+const music = document.getElementById('bg-music');
+const mBtn  = document.getElementById('music-btn');
+let playing = false;
+function tryPlay(){
+  if(playing) return;
+  music.volume = 0.38;
+  music.play().then(() => { playing=true; mBtn.classList.add('playing'); mBtn.textContent='♫'; }).catch(()=>{});
+}
+document.addEventListener('click', tryPlay, {once:false, passive:true});
+mBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  if(playing){ music.pause(); playing=false; mBtn.classList.remove('playing'); mBtn.textContent='♪'; }
+  else { music.play().then(()=>{ playing=true; mBtn.classList.add('playing'); mBtn.textContent='♫'; }); }
+});
+</script>
+</body>
+</html>
